@@ -1,6 +1,6 @@
 [project]
 name = "langchain-zhipuai-dev"
-version = "0.1.0"
+version = "0.1.1"
 description = "Implementation of LangChain for ZhipuAI(Just for coding exercise)"
 readme = "README.md"
 requires-python = ">=3.12"

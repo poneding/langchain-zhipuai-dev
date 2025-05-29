@@ -2,7 +2,7 @@ import os
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
-from chat_zhipuai import ChatZhipuAI
+from langchain_zhipuai_dev.chat import ChatZhipuAI
 
 
 def main():

@@ -50,7 +50,7 @@ export ZHIPUAI_API_KEY="YOUR_ZHIPUAI_API_KEY"
 
 ```python
 import os
-from chat_zhipuai_dev import ChatZhipuAI
+from langchain_zhipuai_dev.chat import ChatZhipuAI
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 # 从环境变量加载 API Key
