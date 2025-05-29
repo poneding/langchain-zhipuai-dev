@@ -2,10 +2,12 @@ import os
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
+from langchain_zhipuai_dev import version
 from langchain_zhipuai_dev.chat import ChatZhipuAI
 
 
 def main():
+    print(version())
     zp = ChatZhipuAI(api_key=os.getenv("ZHIPUAI_API_KEY"))
 
     print("--- Using invoke API ---")

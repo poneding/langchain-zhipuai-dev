@@ -1,5 +1,8 @@
-from chat import ChatZhipuAI
+from importlib.metadata import version as get_version
+
+from .chat import ChatZhipuAI
+from .embedding import ZhipuAIEmbeddings
 
 
 def version() -> str:
-    return "0.1.2"
+    return get_version("langchain-zhipuai-dev")

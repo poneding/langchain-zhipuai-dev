@@ -1,6 +1,6 @@
 [project]
 name = "langchain-zhipuai-dev"
-version = "0.2.0"
+version = "0.3.0"
 description = "Implementation of LangChain for ZhipuAI(Just for coding exercise)"
 readme = "README.md"
 authors = [{ name = "poneding", email = "poneding@gmail.com" }]

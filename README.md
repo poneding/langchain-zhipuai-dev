@@ -7,7 +7,8 @@
 
 ## 特性
 
-- 支持智谱 AI 的多种模型 (例如 `glm-4`, `glm-4-air`, `glm-3-turbo` 等，默认 `glm-4-plus`)。
+- 支持智谱 AI 的多种对话模型 (例如 `glm-4-plus`, `glm-4-air`, `glm-4-flash` 等，默认 `glm-4-plus`)。
+- 支持智谱 AI 的多种嵌入模型 (例如 `embedding-3`, `embedding-2`)，默认 `embedding-3`。
 - 支持标准的 LangChain `invoke`, `stream`, 和 `generate` (批量) API。
 - 灵活的消息输入格式 (字典列表或 `BaseMessage` 对象列表)。
 - 可配置的参数，如 `temperature`, `max_tokens`, `stop` 序列等。
@@ -40,7 +41,7 @@ export ZHIPUAI_API_KEY="YOUR_ZHIPUAI_API_KEY"
 
 或者，你也可以在代码中初始化 `ChatZhipuAI` 类时直接传递 `api_key` 参数。
 
-## 使用方法
+## 对话模型（Chat）
 
 下面是一些如何使用 `langchain-zhipuai` 的基本示例。
 
@@ -55,7 +56,7 @@ from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 # 从环境变量加载 API Key
 llm = ChatZhipuAI(
-    model_name="glm-4",  # 可选，默认为 "glm-4-plus"
+    model_name="glm-4-plus",  # 可选，默认为 "glm-4-plus"
     temperature=0.7,     # 可选，默认为 None (使用智谱AI的默认值)
     # api_key="YOUR_ZHIPUAI_API_KEY" # 如果没有设置环境变量，可以在这里提供
 )
@@ -139,16 +140,7 @@ if batch_response.llm_output:
     print(f"\nLLM Output from generate: {batch_response.llm_output}")
 ```
 
-### 消息格式
-
-`ChatZhipuAI` 支持两种主要的消息输入格式：
-
-- **字典列表**: 例如 `[{"role": "user", "content": "你好"}]`
-- **`BaseMessage` 对象列表**: 例如 `[HumanMessage(content="你好")]` (推荐，更符合LangChain生态)
-
-支持的角色包括 `system`, `user`, `assistant`, 以及通用的 `ChatMessage` (需要指定 `role`)。
-
-## `ChatZhipuAI` 参数
+### 参数说明
 
 初始化 `ChatZhipuAI` 时可以传递以下参数：
 
@@ -159,6 +151,58 @@ if batch_response.llm_output:
 - `stop` (List[str], 可选): 一个或多个停止序列。默认为 `None`。
 - `max_retries` (int, 可选): API请求失败时的最大重试次数。默认为 `3`。
 - `api_key` (str, 可选): 你的智谱AI API密钥。如果未提供，则会尝试从环境变量 `ZHIPUAI_API_KEY` 中读取。
+
+### 消息格式
+
+`ChatZhipuAI` 支持两种主要的消息输入格式：
+
+---
+
+## 嵌入模型（Embeddings）
+
+`langchain-zhipuai` 还提供了对智谱 AI 嵌入模型的支持，可用于文本向量化等场景。
+
+### 用法示例
+
+初始化过程参照上述内容。
+
+```python
+from langchain_zhipuai_dev.embedding import ZhipuAIEmbeddings
+from pydantic import SecretStr
+
+# 初始化嵌入模型
+embeddings = ZhipuAIEmbeddings(
+    api_key=SecretStr("YOUR_ZHIPUAI_API_KEY"),  # 可选，若已设置环境变量可省略
+    model="embedding-3"  # 可选，默认为 "embedding-3"
+)
+
+# 文本批量嵌入
+texts = ["你好世界", "langchain 嵌入测试"]
+vectors = embeddings.embed_documents(texts)
+print(vectors)  # List[List[float]]
+
+# 单条查询嵌入
+query = "什么是人工智能？"
+query_vector = embeddings.embed_query(query)
+print(query_vector)  # List[float]
+```
+
+### 参数说明
+
+- `api_key` (`SecretStr`，可选): 智谱 AI API 密钥。若未提供，则尝试从环境变量读取。
+- `model` (`str`，可选): 嵌入模型名称，默认为 `"embedding-3"`。
+
+### 方法说明
+
+- `embed_documents(texts: List[str]) -> List[List[float]]`: 批量获取文本嵌入向量。
+- `embed_query(text: str) -> List[float]`: 获取单条文本的嵌入向量。
+
+---
+
+- **字典列表**: 例如 `[{"role": "user", "content": "你好"}]`
+- **`BaseMessage` 对象列表**: 例如 `[HumanMessage(content="你好")]` (推荐，更符合LangChain生态)
+
+支持的角色包括 `system`, `user`, `assistant`, 以及通用的 `ChatMessage` (需要指定 `role`)。
 
 ## 贡献
 
